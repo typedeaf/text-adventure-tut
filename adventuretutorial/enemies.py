@@ -1,8 +1,7 @@
 """Defines the enemies in the game"""
-__author__ = 'Phillip Johnson'
+__author__ = ['Phillip Johnson', 'Chad Wilson']
 
-
-class Enemy:
+class Enemy(object):
     """A base class for all enemies"""
     def __init__(self, name, hp, damage):
         """Creates a new enemy
@@ -18,12 +17,16 @@ class Enemy:
     def is_alive(self):
         return self.hp > 0
 
-
 class GiantSpider(Enemy):
     def __init__(self):
-        super().__init__(name="Giant Spider", hp=10, damage=2)
-
+        super(GiantSpider, self).__init__(name="Giant Spider",
+                         hp=10,
+                         damage=2)
 
 class Ogre(Enemy):
     def __init__(self):
-        super().__init__(name="Ogre", hp=30, damage=15)
+        super(Ogre, self).__init__(name="Ogre",
+                         hp=30,
+                         damage=15 )
+
+

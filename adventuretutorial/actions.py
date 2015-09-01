@@ -1,10 +1,9 @@
 """Describes the actions a player can make in the game"""
-__author__ = 'Phillip Johnson'
+__author__ = ['Phillip Johnson', 'Chad Wilson']
 
 from player import Player
 
-
-class Action():
+class Action(object):
     """The base class for all actions"""
     def __init__(self, method, name, hotkey, **kwargs):
         """Creates a new action
@@ -20,40 +19,37 @@ class Action():
         self.kwargs = kwargs
 
     def __str__(self):
-        return "{}: {}".format(self.hotkey, self.name)
-
+        return "{0}: {1}".format(self.hotkey, self.name)
 
 class MoveNorth(Action):
     def __init__(self):
-        super().__init__(method=Player.move_north, name='Move north', hotkey='n')
-
+        super(MoveNorth, self).__init__(method=Player.move_north, name="Move north", hotkey="n")
 
 class MoveSouth(Action):
     def __init__(self):
-        super().__init__(method=Player.move_south, name='Move south', hotkey='s')
-
+        super(MoveSouth, self).__init__(method=Player.move_south, name="Move south", hotkey="s")
 
 class MoveEast(Action):
     def __init__(self):
-        super().__init__(method=Player.move_east, name='Move east', hotkey='e')
-
+        super(MoveEast, self).__init__(method=Player.move_east, name="Move east", hotkey="e")
 
 class MoveWest(Action):
     def __init__(self):
-        super().__init__(method=Player.move_west, name='Move west', hotkey='w')
-
+        super(MoveWest, self).__init__(method=Player.move_west, name="Move west", hotkey="w")
 
 class ViewInventory(Action):
     """Prints the player's inventory"""
     def __init__(self):
-        super().__init__(method=Player.print_inventory, name='View inventory', hotkey='i')
+        super(ViewInventory, self).__init__(method=Player.print_inventory, name="View inventory", hotkey="i")
 
+class ViewMap(Action):
+    def __init__(self):
+        super(ViewMap, self).__init__(method=Player.view_map, name="View map", hotkey="m")
 
 class Attack(Action):
     def __init__(self, enemy):
-        super().__init__(method=Player.attack, name="Attack", hotkey='a', enemy=enemy)
-
+        super(Attack, self).__init__(method=Player.attack, name="Attack", hotkey="a", enemy=enemy)
 
 class Flee(Action):
     def __init__(self, tile):
-        super().__init__(method=Player.flee, name="Flee", hotkey='f', tile=tile)
+        super(Flee, self).__init__(method=Player.flee, name="Flee", hotkey="f", tile=tile)

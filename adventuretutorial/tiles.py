@@ -1,10 +1,9 @@
 """Describes the tiles in the world space."""
-__author__ = 'Phillip Johnson'
+__author__ = ['Phillip Johnson', 'Chad Wilson']
 
 import items, enemies, actions, world
 
-
-class MapTile:
+class MapTile(object):
     """The base class for a tile within the world space"""
     def __init__(self, x, y):
         """Creates a new tile.
@@ -14,12 +13,13 @@ class MapTile:
         """
         self.x = x
         self.y = y
+        self.id = "??????????"
 
     def intro_text(self):
         """Information to be displayed when the player moves into this tile."""
         raise NotImplementedError()
 
-    def modify_player(self, the_player):
+    def modify_player(self, player):
         """Process actions that change the state of the player."""
         raise NotImplementedError()
 
@@ -40,30 +40,37 @@ class MapTile:
         """Returns all of the available actions in this room."""
         moves = self.adjacent_moves()
         moves.append(actions.ViewInventory())
-
+        moves.append(actions.ViewMap())
         return moves
 
 
 class StartingRoom(MapTile):
+    def __init__(self, x, y):
+        super(StartingRoom, self).__init__(x,y)
+        self.id = "START"
+
     def intro_text(self):
         return """
         You find yourself in a cave with a flickering torch on the wall.
         You can make out four paths, each equally as dark and foreboding.
         """
 
-    def modify_player(self, the_player):
-        #Room has no action on player
+    def modify_player(self, player):
+        # Room has no action on player. Must override parent method because of raise()
         pass
 
 
 class EmptyCavePath(MapTile):
+    def __init__(self, x, y):
+        super(EmptyCavePath, self).__init__(x, y)
+        self.id = "Empty Cave Path"
+
     def intro_text(self):
         return """
         Another unremarkable part of the cave. You must forge onwards.
         """
 
-    def modify_player(self, the_player):
-        #Room has no action on player
+    def modify_player(self, player):
         pass
 
 
@@ -71,45 +78,65 @@ class LootRoom(MapTile):
     """A room that adds something to the player's inventory"""
     def __init__(self, x, y, item):
         self.item = item
-        super().__init__(x, y)
+        super(LootRoom, self).__init__(x, y)
 
-    def add_loot(self, the_player):
-        the_player.inventory.append(self.item)
+    def add_loot(self, player):
+        if isinstance(self.item, items.Gold):
+            player.add_gold(self.item.amount)
+        else:
+            player.inventory.append(self.item)
 
-    def modify_player(self, the_player):
-        self.add_loot(the_player)
+        self.item = None
 
+    def modify_player(self, player):
+        if self.item:
+            self.add_loot(player)
+        
 
 class FindDaggerRoom(LootRoom):
     def __init__(self, x, y):
-        super().__init__(x, y, items.Dagger())
+        super(FindDaggerRoom, self).__init__(x, y, items.Dagger())
+        self.id = "Treasure: Dagger"
 
     def intro_text(self):
-        return """
-        You notice something shiny in the corner.
-        It's a dagger! You pick it up.
-        """
+        if self.item:
+            return """
+            You notice something shiny in the corner.
+            It's a dagger! You pick it up.
+            """
+        else:
+            return """
+            This is the room that your dagger was found in.
+            Nothing else remarkable about the room now.
+            """
 
 
 class Find5GoldRoom(LootRoom):
     def __init__(self, x, y):
-        super().__init__(x, y, items.Gold(5))
+        super(Find5GoldRoom, self).__init__(x, y, items.Gold(5))
+        self.id = "Treasure: Gold"
 
     def intro_text(self):
-        return """
-        Someone dropped a 5 gold piece. You pick it up.
-        """
+        if self.item:
+            return """
+            Someone dropped a 5 gold piece. You pick it up.
+            """
+        else:
+            return """
+            You discovered gold in this room.
+            It is now empty and unremarkable.
+            """
 
 
 class EnemyRoom(MapTile):
     def __init__(self, x, y, enemy):
         self.enemy = enemy
-        super().__init__(x, y)
+        super(EnemyRoom, self).__init__(x, y)
 
     def modify_player(self, the_player):
         if self.enemy.is_alive():
             the_player.hp = the_player.hp - self.enemy.damage
-            print("Enemy does {} damage. You have {} HP remaining.".format(self.enemy.damage, the_player.hp))
+            print "Enemy does {0} damage. You have {1} HP remaining.".format(self.enemy.damage, the_player.hp)
 
     def available_actions(self):
         if self.enemy.is_alive():
@@ -120,7 +147,8 @@ class EnemyRoom(MapTile):
 
 class GiantSpiderRoom(EnemyRoom):
     def __init__(self, x, y):
-        super().__init__(x, y, enemies.GiantSpider())
+        super(GiantSpiderRoom, self).__init__(x, y, enemies.GiantSpider())
+        self.id = "Giant Spider"
 
     def intro_text(self):
         if self.enemy.is_alive():
@@ -129,13 +157,14 @@ class GiantSpiderRoom(EnemyRoom):
             """
         else:
             return """
-            The corpse of a dead spider rots on the ground.
+            The corpse of a dead spider lies rotting on the ground.
             """
 
 
 class OgreRoom(EnemyRoom):
     def __init__(self, x, y):
-        super().__init__(x, y, enemies.Ogre())
+        super(OgreRoom, self).__init__(x, y, enemies.Ogre())
+        self.id = "Ogre"
 
     def intro_text(self):
         if self.enemy.is_alive():
@@ -147,7 +176,7 @@ class OgreRoom(EnemyRoom):
             A dead ogre reminds you of your triumph.
             """
 
-
+ 
 class SnakePitRoom(MapTile):
     def intro_text(self):
         return """
@@ -160,12 +189,11 @@ class SnakePitRoom(MapTile):
         player.hp = 0
 
 
-class LeaveCaveRoom(MapTile):
+class VictoryRoom(MapTile):
     def intro_text(self):
         return """
         You see a bright light in the distance...
         ... it grows as you get closer! It's sunlight!
-
 
         Victory is yours!
         """
