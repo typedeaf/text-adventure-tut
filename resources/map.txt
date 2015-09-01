@@ -1,8 +1,9 @@
-			LeaveCaveRoom	
-	Find5GoldRoom	EmptyCavePath	GiantSpiderRoom	EmptyCavePath
-		EmptyCavePath		
-		EmptyCavePath		
-GiantSpiderRoom	EmptyCavePath	StartingRoom	EmptyCavePath	FindDaggerRoom
-		Find5GoldRoom		
-		EmptyCavePath	OgreRoom	Find5GoldRoom		
-		SnakePitRoom		
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx VictoryRoom          xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx Find5GoldRoom        EmptyCavePath        GiantSpiderRoom      xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx EmptyCavePath        xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx EmptyCavePath        xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+GiantSpiderRoom      EmptyCavePath        StartingRoom         EmptyCavePath        FindDaggerRoom
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx Find5GoldRoom        xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx EmptyCavePath        OgreRoom             Find5GoldRoom
+xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx SnakePitRoom         xxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
